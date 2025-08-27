@@ -2,10 +2,11 @@ Flask
 groq
 gunicorn
 python-dotenv
-Werkzeung
+Werkzeug
 Jinja2
 MarkupSafe
 itsdangerous
 click
 blinker
+
 
