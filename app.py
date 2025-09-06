@@ -19,7 +19,7 @@ if not os.getenv('GROQ_API_KEY'):
     print("Get your free API key from: https://console.groq.com/keys")
 # =============================================
 
-# Resume data for context
+# Updated Resume data for context
 RESUME_CONTEXT = """
 VELLANKI BHARATH's Resume:
 
@@ -30,11 +30,11 @@ CONTACT INFORMATION:
 - LinkedIn: https://www.linkedin.com/in/vellankibharath
 
 SUMMARY:
-Resolute and innovative Computer Science Engineering student. Enthusiastic about leveraging AI technologies to solve complex problems and drive technological advancements. Continuously expanding knowledge in AI tools to work fast and efficient. Solid foundation in Computer Science fundamentals, Effective communicator, and collaborator across teams.
+Resolute and innovative Computer Science Engineering graduate. Enthusiastic about leveraging AI technologies to solve complex problems and drive technological advancements. Continuously expanding knowledge in AI tools to work fast and efficient. Solid foundation in Computer Science fundamentals, Effective communicator, and collaborator across teams.
 
 EDUCATION:
-- Amrita Sai Institute of Science and Technology, Vijayawada (Dec 2021 - May 2025)
-  Bachelor of Technology in Computer Science and Engineering - 7.8 CGPA
+- Amrita Sai Institute of Science and Technology, Vijayawada (Dec 2021 - May 2025) - GRADUATED
+  Bachelor of Technology in Computer Science and Engineering - 7.8 CGPA - COMPLETED
 - SASI junior college, KAMAVARAPUKOTA (June 2019 - April 2021)
   Board of Intermediate - 88.8%
 - SASI English Medium School, KAMAVARAPUKOTA (June 2018 - April 2019)
@@ -88,6 +88,8 @@ CERTIFICATIONS:
 ACHIEVEMENTS:
 - Certificate of appreciation by Government of Andhra Pradesh (Acts as mentor for government teachers, managing IFPs)
 - Certificate of Participation in Project Expo by Amrita Sai Institute of Science & Technology
+
+GRADUATION STATUS: Vellanki Bharath has COMPLETED his Bachelor of Technology in Computer Science and Engineering from Amrita Sai Institute of Science and Technology in May 2025. He is a GRADUATE, not a current student.
 """
 
 def get_chatbot_response(user_question):
@@ -96,6 +98,16 @@ def get_chatbot_response(user_question):
         system_prompt = f"""
         You are a helpful chatbot that answers questions about Vellanki Bharath's resume. 
         Be friendly, professional, and informative. Answer questions directly based on the resume information provided.
+        
+        IMPORTANT: Vellanki Bharath has ALREADY GRADUATED in May 2025. He completed his B.Tech in Computer Science and Engineering. 
+        He is NOT a current student - he is a GRADUATE. Always refer to him as a graduate, not as a student.
+        
+        When asked about graduation:
+        - He GRADUATED in May 2025
+        - He COMPLETED his Bachelor of Technology in Computer Science and Engineering 
+        - He is a COMPUTER SCIENCE GRADUATE
+        - He has a 7.8 CGPA
+        
         If asked about something not in the resume, politely mention that information isn't available in the resume, 
         but direct them to contact Bharath directly at vellankibharath.b@gmail.com for additional information.
         
@@ -138,8 +150,8 @@ def get_fallback_response(user_question):
     elif any(word in question_lower for word in ['experience', 'work', 'job', 'internship']):
         return "🏢 Currently working as Data Annotator at Adept Talent Acquisition (April 2025 - Present)\n• Developed ML Labelling for predictive analytics\n• Collaborated with cross-functional teams"
     
-    elif any(word in question_lower for word in ['education', 'college', 'degree', 'study']):
-        return "🎓 B.Tech in Computer Science - Amrita Sai Institute of Science and Technology\n📊 CGPA: 7.8 (Dec 2021 - May 2025)\n📚 Intermediate: 88.8% from SASI Junior College"
+    elif any(word in question_lower for word in ['education', 'college', 'degree', 'study', 'graduate', 'graduation']):
+        return "🎓 GRADUATED with B.Tech in Computer Science - Amrita Sai Institute of Science and Technology\n📊 CGPA: 7.8 (Completed in May 2025)\n✅ Computer Science Graduate\n📚 Intermediate: 88.8% from SASI Junior College"
     
     elif any(word in question_lower for word in ['skills', 'programming', 'python', 'technology']):
         return "💻 Programming: Python, SQL, HTML/CSS/JavaScript, Flask\n🤖 AI/ML: Pandas, Scikit-learn, Machine Learning, Data Visualization\n🛠️ Tools: VS Code, Jupyter, GitHub, Docker, Postman"
@@ -147,8 +159,11 @@ def get_fallback_response(user_question):
     elif any(word in question_lower for word in ['projects', 'github', 'portfolio']):
         return "🚀 Key Projects:\n1️⃣ Heart Stroke Prediction (42K dataset, 6 ML algorithms, Flask deployment)\n2️⃣ Text to Image Generation (Stable Diffusion, CLIP, SAM2, Dockerized)\n🔗 GitHub: Available in resume"
     
+    elif 'year' in question_lower and any(word in question_lower for word in ['graduate', 'graduation', 'finish', 'complete']):
+        return "🎓 Vellanki Bharath GRADUATED in May 2025 with a B.Tech in Computer Science and Engineering from Amrita Sai Institute of Science and Technology. He completed his degree with a 7.8 CGPA."
+    
     else:
-        return "Hi! I'm Bharath's resume assistant. Ask me about his:\n• 📞 Contact Information\n• 💼 Work Experience\n• 🎓 Education\n• 💻 Technical Skills\n• 🚀 Projects\n\nFor detailed discussions, reach out to vellankibharath.b@gmail.com"
+        return "Hi! I'm Bharath's resume assistant. Bharath is a Computer Science Graduate (May 2025). Ask me about his:\n• 📞 Contact Information\n• 💼 Work Experience\n• 🎓 Education & Graduation\n• 💻 Technical Skills\n• 🚀 Projects\n\nFor detailed discussions, reach out to vellankibharath.b@gmail.com"
 
 @app.route('/')
 def index():
