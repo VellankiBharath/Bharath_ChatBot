@@ -2,18 +2,8 @@ from flask import Flask, render_template, request, jsonify
 from groq import Groq
 import os
 from datetime import datetime
-import requests
-import threading
-import time
-from apscheduler.schedulers.background import BackgroundScheduler
-import atexit
-import logging
 
 app = Flask(__name__)
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # ============ GROQ API KEY CONFIGURATION ============
 # Initialize Groq client with API key from environment variable
@@ -27,66 +17,6 @@ if not os.getenv('GROQ_API_KEY'):
     print("Warning: GROQ_API_KEY environment variable not found!")
     print("Make sure you've set it with: set GROQ_API_KEY=your-key-here")
     print("Get your free API key from: https://console.groq.com/keys")
-# =============================================
-
-# ============ KEEP-ALIVE CONFIGURATION ============
-# Get the app URL from environment variables (Render sets this automatically)
-APP_URL = os.getenv('RENDER_EXTERNAL_URL') or os.getenv('APP_URL') or 'http://localhost:5000'
-PING_INTERVAL = 300  # 5 minutes in seconds
-
-def keep_alive_ping():
-    """Send a ping to keep the app alive"""
-    try:
-        response = requests.get(f"{APP_URL}/health", timeout=30)
-        if response.status_code == 200:
-            logger.info(f"✅ Keep-alive ping successful at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
-            logger.warning(f"⚠️ Keep-alive ping returned status {response.status_code}")
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Keep-alive ping failed: {str(e)}")
-    except Exception as e:
-        logger.error(f"❌ Unexpected error in keep-alive ping: {str(e)}")
-
-def start_keep_alive_scheduler():
-    """Start the keep-alive scheduler"""
-    if APP_URL and 'localhost' not in APP_URL:
-        scheduler = BackgroundScheduler()
-        scheduler.add_job(
-            func=keep_alive_ping,
-            trigger="interval",
-            seconds=PING_INTERVAL,
-            id='keep_alive_job',
-            replace_existing=True
-        )
-        scheduler.start()
-        logger.info(f"🔄 Keep-alive scheduler started - pinging every {PING_INTERVAL} seconds")
-        
-        # Ensure scheduler shuts down when app exits
-        atexit.register(lambda: scheduler.shutdown())
-        
-        return scheduler
-    else:
-        logger.info("🏠 Running locally - keep-alive disabled")
-        return None
-
-def background_keep_alive():
-    """Alternative background thread approach for keep-alive"""
-    while True:
-        try:
-            if APP_URL and 'localhost' not in APP_URL:
-                response = requests.get(f"{APP_URL}/ping", timeout=30)
-                logger.info(f"🔄 Background ping: {response.status_code}")
-            time.sleep(PING_INTERVAL)
-        except Exception as e:
-            logger.error(f"Background ping error: {str(e)}")
-            time.sleep(PING_INTERVAL)
-
-# Start keep-alive in background thread (as backup)
-def start_background_keepalive():
-    if APP_URL and 'localhost' not in APP_URL:
-        thread = threading.Thread(target=background_keep_alive, daemon=True)
-        thread.start()
-        logger.info("🧵 Background keep-alive thread started")
 # =============================================
 
 # Updated Resume data for context
@@ -260,52 +190,15 @@ def chat():
         'model': MODEL
     })
 
-# ============ KEEP-ALIVE ENDPOINTS ============
 @app.route('/health')
 def health():
-    """Enhanced health check endpoint"""
+    """Health check endpoint"""
     return jsonify({
         'status': 'healthy', 
         'message': 'Resume chatbot is running with Groq!',
         'model': MODEL,
-        'api': 'Groq',
-        'timestamp': datetime.now().isoformat(),
-        'uptime': 'active',
-        'keep_alive': 'enabled' if APP_URL and 'localhost' not in APP_URL else 'disabled'
+        'api': 'Groq'
     })
-
-@app.route('/ping')
-def ping():
-    """Simple ping endpoint for keep-alive"""
-    return {
-        'status': 'pong',
-        'timestamp': datetime.now().isoformat(),
-        'message': 'App is alive!'
-    }
-
-@app.route('/status')
-def status():
-    """Detailed status endpoint"""
-    return jsonify({
-        'app': 'Resume Chatbot',
-        'status': 'running',
-        'model': MODEL,
-        'api': 'Groq',
-        'timestamp': datetime.now().isoformat(),
-        'app_url': APP_URL,
-        'keep_alive_interval': f"{PING_INTERVAL} seconds"
-    })
-
-# Wake up endpoint for external monitoring services
-@app.route('/wake')
-def wake():
-    """Wake up endpoint"""
-    return jsonify({
-        'message': 'App is awake!',
-        'timestamp': datetime.now().isoformat(),
-        'status': 'active'
-    })
-# =============================================
 
 # Optional: Add model switching capability
 @app.route('/switch_model', methods=['POST'])
@@ -331,20 +224,5 @@ def switch_model():
 if __name__ == '__main__':
     print(f"🚀 Starting Resume Chatbot with Groq API")
     print(f"🤖 Model: {MODEL}")
-    print(f"🌐 Server URL: {APP_URL}")
-    print(f"🔄 Keep-alive: {'Enabled' if APP_URL and 'localhost' not in APP_URL else 'Disabled (local)'}")
-    
-    # Start keep-alive mechanisms
-    start_keep_alive_scheduler()  # Primary method using scheduler
-    start_background_keepalive()  # Backup method using thread
-    
-    # Configure for production deployment
-    port = int(os.environ.get('PORT', 5000))
-    debug_mode = os.environ.get('FLASK_ENV') != 'production'
-    
-    app.run(
-        debug=debug_mode,
-        host='0.0.0.0',
-        port=port,
-        use_reloader=False  # Disable reloader in production to avoid duplicate schedulers
-    )
+    print(f"🌐 Server: http://localhost:5000")
+    app.run(debug=True, host='0.0.0.0', port=5000)
