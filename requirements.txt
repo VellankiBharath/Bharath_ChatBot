@@ -8,5 +8,7 @@ MarkupSafe
 itsdangerous
 click
 blinker
+APScheduler==3.10.4
+
 
 
