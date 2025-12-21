@@ -3,11 +3,9 @@ groq
 gunicorn
 python-dotenv
 Werkzeug
-Jinja2
-MarkupSafe
-itsdangerous
-click
-blinker
+
+
+
 
 
 
