@@ -221,8 +221,11 @@ def switch_model():
     else:
         return jsonify({'success': False, 'error': 'Invalid model'}), 400
 
-if __name__ == '__main__':
+if __name__ != '__main__':
+    pass
+else:
     print(f"🚀 Starting Resume Chatbot with Groq API")
     print(f"🤖 Model: {MODEL}")
     print(f"🌐 Server: http://localhost:5000")
     app.run(debug=True, host='0.0.0.0', port=5000)
+
