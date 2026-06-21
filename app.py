@@ -19,9 +19,9 @@ if not os.getenv('GROQ_API_KEY'):
     print("Get your free API key from: https://console.groq.com/keys")
 # =============================================
 
-# Updated Resume data for context
-RESUME_CONTEXT = """
-VELLANKI BHARATH's Resume:
+# Updated Bharath data for context
+BHARATH_CONTEXT = """
+VELLANKI BHARATH's Information:
 
 CONTACT INFORMATION:
 - Location: Substation street KOTHAGANDIGUDEM, ELURU district, Andhra Pradesh
@@ -56,9 +56,12 @@ TOOLS:
 VS Code, Jupyter Notebook, GitHub, Postman, Docker, Docker Hub
 
 PROFESSIONAL EXPERIENCE:
-ADEPT TALENT ACQUISITION - Data Annotator | Internship (April 2025 - Present)
+ADEPT TALENT ACQUISITION - Data Annotator | Internship (April 2025 - Oct 2025)
 - Developed ML Labelling for predictive analytics
 - Collaborated with cross-functional teams to develop data-driven solutions
+NVIDIA - Data Annotator | Full-time (Oct 2025 - Present)
+- Contributed to Build quality Data for Remotic Cars
+- LIDAR data annotation and analysis for autonomous vehicle systems
 
 PROJECTS:
 1. HEART STROKE PREDICTION
@@ -90,14 +93,25 @@ ACHIEVEMENTS:
 - Certificate of Participation in Project Expo by Amrita Sai Institute of Science & Technology
 
 GRADUATION STATUS: Vellanki Bharath has COMPLETED his Bachelor of Technology in Computer Science and Engineering from Amrita Sai Institute of Science and Technology in May 2025. He is a GRADUATE, not a current student.
+
+Personal Details:
+- Date of Birth: 29th May 2003
+- Gender: Male
+- Father's Name: Vellanki Ramesh
+- Mother's Name: Vellanki Prabha
+
+When asked about any Love:
+- No, Single.
+When asked about Best Friend:
+- Bhanu Prasad
 """
 
 def get_chatbot_response(user_question):
     """Generate AI response about the resume using Groq API"""
     try:
         system_prompt = f"""
-        You are a helpful chatbot that answers questions about Vellanki Bharath's resume. 
-        Be friendly, professional, and informative. Answer questions directly based on the resume information provided.
+        You are a helpful chatbot that answers questions about Vellanki Bharath's information. 
+        Be friendly, professional, and informative. Answer questions directly based on the Bharath information provided.
         
         IMPORTANT: Vellanki Bharath has ALREADY GRADUATED in May 2025. He completed his B.Tech in Computer Science and Engineering. 
         He is NOT a current student - he is a GRADUATE. Always refer to him as a graduate, not as a student.
@@ -111,8 +125,8 @@ def get_chatbot_response(user_question):
         If asked about something not in the resume, politely mention that information isn't available in the resume, 
         but direct them to contact Bharath directly at vellankibharath.b@gmail.com for additional information.
         
-        Resume Information:
-        {RESUME_CONTEXT}
+        Bharath Information:
+        {BHARATH_CONTEXT}
         """
         
         # Groq API call - different syntax than OpenAI
@@ -123,7 +137,7 @@ def get_chatbot_response(user_question):
                 {"role": "user", "content": user_question}
             ],
             max_tokens=500,
-            temperature=0.7,
+            temperature=0.9,
             top_p=1,
             stream=False,  # Set to True for streaming responses
             stop=None
@@ -136,7 +150,7 @@ def get_chatbot_response(user_question):
         if "rate_limit" in error_message.lower() or "quota" in error_message.lower():
             return """I'm currently experiencing high demand. Please try again in a moment or 
                      contact Bharath directly at vellankibharath.b@gmail.com for information 
-                     about his resume and qualifications."""
+                     about his information and qualifications."""
         else:
             return f"Sorry, I'm having trouble processing your request. Please contact Bharath at vellankibharath.b@gmail.com for assistance."
 
@@ -221,11 +235,8 @@ def switch_model():
     else:
         return jsonify({'success': False, 'error': 'Invalid model'}), 400
 
-if __name__ != '__main__':
-    pass
-else:
+if __name__ == '__main__':
     print(f"🚀 Starting Resume Chatbot with Groq API")
     print(f"🤖 Model: {MODEL}")
     print(f"🌐 Server: http://localhost:5000")
     app.run(debug=True, host='0.0.0.0', port=5000)
-
