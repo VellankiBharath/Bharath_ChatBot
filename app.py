@@ -56,12 +56,10 @@ TOOLS:
 VS Code, Jupyter Notebook, GitHub, Postman, Docker, Docker Hub
 
 PROFESSIONAL EXPERIENCE:
-ADEPT TALENT ACQUISITION - Data Annotator | Internship (April 2025 - Oct 2025)
-- Developed ML Labelling for predictive analytics
-- Collaborated with cross-functional teams to develop data-driven solutions
 NVIDIA - Data Annotator | Full-time (Oct 2025 - Present)
 - Contributed to Build quality Data for Remotic Cars
 - LIDAR data annotation and analysis for autonomous vehicle systems
+ADEPT TALENT ACQUISITION - Data Annotator | Internship (April 2025 - Oct 2025)
 
 PROJECTS:
 1. HEART STROKE PREDICTION
