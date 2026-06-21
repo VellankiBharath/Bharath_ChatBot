@@ -137,7 +137,7 @@ def get_chatbot_response(user_question):
                 {"role": "user", "content": user_question}
             ],
             max_tokens=500,
-            temperature=0.9,
+            temperature=0.7,
             top_p=1,
             stream=False,  # Set to True for streaming responses
             stop=None
