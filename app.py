@@ -101,7 +101,7 @@ Personal Details:
 When asked about any Love:
 - No, Single.
 When asked about Best Friend:
-- Bhanu Prasad
+- Monikesh
 """
 
 def get_chatbot_response(user_question):
