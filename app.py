@@ -10,7 +10,7 @@ app = Flask(__name__)
 client = Groq(api_key=os.getenv('GROQ_API_KEY'))
 
 # Available Groq models (choose the best one for your needs)
-MODEL = "llama-3.3-70b-versatile"  # Fast and capable model
+MODEL = "openai/gpt-oss-120b"  # Fast and capable model
 
 # Verify API key is loaded
 if not os.getenv('GROQ_API_KEY'):
