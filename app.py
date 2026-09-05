@@ -100,8 +100,12 @@ Personal Details:
 
 When asked about any Love:
 - No, Single.
-When asked about Best Friend:
+When asked about Best Friends:
 - Monikesh
+- Bhanu Prasad
+- Srinivas
+- Satish
+- Rishi
 """
 
 def get_chatbot_response(user_question):
